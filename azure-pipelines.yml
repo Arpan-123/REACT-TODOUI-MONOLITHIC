@@ -2,7 +2,7 @@ trigger:
 - main
 -feature*
 
-pool:targetpool
+pool: targetpool
 
 
 steps:

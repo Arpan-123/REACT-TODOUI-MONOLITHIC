@@ -1,12 +1,13 @@
 trigger:
-- main
--feature*
+  - main
+  - feature/*
 
-pool: targetpool
-
+pool:
+  name: 'targetpool'   # self-hosted agent pool name
 
 steps:
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
-    script: 'npm install'
+    script: |
+      npm install

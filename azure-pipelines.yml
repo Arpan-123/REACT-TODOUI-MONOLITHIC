@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 trigger: none 
 pool: Default
 
@@ -6,3 +7,19 @@ steps:
   inputs:
     targetType: 'inline'
     script: 'Write-Host "Hello World"'
+=======
+trigger:
+  - main
+  - feature/*
+
+pool:
+  name: 'targetpool'   # self-hosted agent pool name
+
+steps:
+- task: PowerShell@2
+  displayName: install
+  inputs:
+    targetType: 'inline'
+    script: |
+      npm install
+>>>>>>> fa08b23d452d3e030699bc1a39a65ce24c2c8d32

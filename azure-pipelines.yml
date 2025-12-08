@@ -1,13 +1,4 @@
-<<<<<<< HEAD
-trigger: none 
-pool: Default
 
-steps: 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: 'Write-Host "Hello World"'
-=======
 trigger:
   - main
   - feature/*
@@ -22,4 +13,4 @@ steps:
     targetType: 'inline'
     script: |
       npm install
->>>>>>> fa08b23d452d3e030699bc1a39a65ce24c2c8d32
+

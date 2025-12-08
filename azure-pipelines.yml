@@ -13,4 +13,8 @@ steps:
     targetType: 'inline'
     script: |
       npm install
-
+- task: PowerShell@2
+  displayName: build
+  inputs:
+    targetType: 'inline'
+    script: 'npm run build'

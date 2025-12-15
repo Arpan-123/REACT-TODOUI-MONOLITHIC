@@ -15,8 +15,9 @@ steps:
       npm install
 
 - task: SonarQubePrepare@8
+  displayName: 'Prepare SonarQube Analysis'
   inputs:
-    SonarQube: 'sonar k liye'
+    SonarQube: 'sonar k liye'   # service connection name
     scannerMode: 'cli'
     configMode: 'manual'
     cliProjectKey: 'react-app'
@@ -25,6 +26,16 @@ steps:
     extraProperties: |
       sonar.sourceEncoding=UTF-8
       sonar.javascript.lcov.reportPaths=coverage/lcov.info
+
+# 5️⃣ 🔥 ACTUAL SCAN HAPPENS HERE
+- task: SonarQubeAnalyze@8
+  displayName: 'Run SonarQube Analysis'
+
+# 6️⃣ Publish Quality Gate
+- task: SonarQubePublish@8
+  displayName: 'Publish SonarQube Quality Gate'
+  inputs:
+    pollingTimeoutSec: '300'
 
 
 - task: PowerShell@2

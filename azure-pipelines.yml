@@ -1,24 +1,27 @@
 trigger:
-  - main   # ❌ feature/* hata diya (Community edition)
+  - main
 
 pool:
   name: 'targetpool'   # self-hosted agent
 
 steps:
 # 1️⃣ Install dependencies
-
 - task: PowerShell@2
   displayName: 'NPM Install'
   inputs:
     targetType: 'inline'
     script: |
       npm install
-- task: Powershell@2  
+
+# 2️⃣ Verify Java & SonarScanner
+- task: PowerShell@2
+  displayName: 'Verify Java & SonarScanner'
   inputs:
+    targetType: 'inline'
     script: |
       java -version
       sonar-scanner --version
-  displayName: Verify Java & SonarScanner
+
 
 
 # 2️⃣ Build project (required, but NOT scanned)

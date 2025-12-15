@@ -14,11 +14,7 @@ steps:
     script: |
       npm install
 
-- task: SonarQubePrepare@8
-  inputs:
-    SonarQube: 'sonar k liye'
-    scannerMode: 'cli'
-    configMode: 'file'
+
 - task: PowerShell@2
   displayName: build
   inputs:
@@ -26,11 +22,12 @@ steps:
     script: 'npm run build'
 
 - task: ArchiveFiles@2
+  displayName: "Archive build output"
   inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)/s/build'
-    includeRootFolder: true
+    rootFolderOrFile: '$(Build.SourcesDirectory)\build'
+    includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)\$(Build.BuildId).zip'
     replaceExistingArchive: true
 
 - task: DownloadPipelineArtifact@2

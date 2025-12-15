@@ -18,7 +18,13 @@ steps:
   inputs:
     SonarQube: 'sonar k liye'
     scannerMode: 'cli'
-    configMode: 'file'
+    configMode: 'manual'
+    cliProjectKey: 'react-app'
+    cliProjectName: 'react-app'
+    cliSources: 'src'
+    extraProperties: |
+      sonar.sourceEncoding=UTF-8
+      sonar.javascript.lcov.reportPaths=coverage/lcov.info
 
 
 - task: PowerShell@2
@@ -28,17 +34,15 @@ steps:
     script: 'npm run build'
 
 - task: ArchiveFiles@2
-  displayName: "Archive build output"
   inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)\build'
+    rootFolderOrFile: '$(System.DefaultworkingDirectory)\build'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)\$(Build.BuildId).zip'
+    archiveFile: '$(System.DefaultworkingDirectory)\build.zip'
     replaceExistingArchive: true
 
-- task: DownloadPipelineArtifact@2
+- task: PublishBuildArtifacts@1
   inputs:
-    buildType: 'current'
-    artifactName: 'arpan artifactory'
-    itemPattern: 'build.zip'
-    targetPath: '$(Pipeline.Workspace)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'react ka project'
+    publishLocation: 'Container'

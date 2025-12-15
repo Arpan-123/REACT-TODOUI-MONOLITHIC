@@ -6,12 +6,20 @@ pool:
 
 steps:
 # 1️⃣ Install dependencies
+
 - task: PowerShell@2
   displayName: 'NPM Install'
   inputs:
     targetType: 'inline'
     script: |
       npm install
+- task: Powershell@2  
+  inputs:
+    script: |
+      java -version
+      sonar-scanner --version
+  displayName: Verify Java & SonarScanner
+
 
 # 2️⃣ Build project (required, but NOT scanned)
 - task: PowerShell@2

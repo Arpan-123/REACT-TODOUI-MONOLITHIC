@@ -25,6 +25,8 @@ steps:
 - task: SonarQubePrepare@8
   displayName: 'Prepare SonarQube Analysis'
   inputs:
+    targetType: 'inline'
+    script: 'cd build/src'
     SonarQube: 'sonar k liye'   # service connection name
     scannerMode: 'cli'
     configMode: 'manual'

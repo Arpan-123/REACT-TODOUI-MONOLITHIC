@@ -1,33 +1,31 @@
-
 trigger:
-  - main
-  - feature/*
+  - main   # ❌ feature/* hata diya (Community edition)
 
 pool:
-  name: 'targetpool'   # self-hosted agent pool name
+  name: 'targetpool'   # self-hosted agent
 
 steps:
+# 1️⃣ Install dependencies
 - task: PowerShell@2
-  displayName: install
+  displayName: 'NPM Install'
   inputs:
     targetType: 'inline'
     script: |
       npm install
 
-
-
+# 2️⃣ Build project (required, but NOT scanned)
 - task: PowerShell@2
-  displayName: build
+  displayName: 'Build React App'
   inputs:
     targetType: 'inline'
-    script: 'npm run build'
+    script: |
+      npm run build
 
+# 3️⃣ Prepare SonarQube (SOURCE scan)
 - task: SonarQubePrepare@8
   displayName: 'Prepare SonarQube Analysis'
   inputs:
-    targetType: 'inline'
-    script: 'cd build/src'
-    SonarQube: 'sonar k liye'   # service connection name
+    SonarQube: 'sonar k liye'   # service connection
     scannerMode: 'cli'
     configMode: 'manual'
     cliProjectKey: 'react-app'
@@ -35,29 +33,32 @@ steps:
     cliSources: 'src'
     extraProperties: |
       sonar.sourceEncoding=UTF-8
-      sonar.javascript.lcov.reportPaths=coverage/lcov.info
+      sonar.exclusions=**/node_modules/**,**/build/**
 
-# 5️⃣ 🔥 ACTUAL SCAN HAPPENS HERE
+# 4️⃣ RUN SCAN
 - task: SonarQubeAnalyze@8
   displayName: 'Run SonarQube Analysis'
 
-# 6️⃣ Publish Quality Gate
+# 5️⃣ Quality Gate
 - task: SonarQubePublish@8
-  displayName: 'Publish SonarQube Quality Gate'
+  displayName: 'Publish Quality Gate'
   inputs:
     pollingTimeoutSec: '300'
 
-
+# 6️⃣ Archive BUILD (Deployment ke liye)
 - task: ArchiveFiles@2
+  displayName: 'Archive build'
   inputs:
-    rootFolderOrFile: '$(System.DefaultworkingDirectory)\build'
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(System.DefaultworkingDirectory)\build.zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
     replaceExistingArchive: true
 
+# 7️⃣ Publish artifact
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'react ka project'
+    ArtifactName: 'react-build'
     publishLocation: 'Container'

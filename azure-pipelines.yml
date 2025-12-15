@@ -14,6 +14,14 @@ steps:
     script: |
       npm install
 
+
+
+- task: PowerShell@2
+  displayName: build
+  inputs:
+    targetType: 'inline'
+    script: 'npm run build'
+
 - task: SonarQubePrepare@8
   displayName: 'Prepare SonarQube Analysis'
   inputs:
@@ -37,12 +45,6 @@ steps:
   inputs:
     pollingTimeoutSec: '300'
 
-
-- task: PowerShell@2
-  displayName: build
-  inputs:
-    targetType: 'inline'
-    script: 'npm run build'
 
 - task: ArchiveFiles@2
   inputs:

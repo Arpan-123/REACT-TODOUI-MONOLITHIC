@@ -7,17 +7,17 @@ pool:
   name: 'targetpool'   # self-hosted agent pool name
 
 steps:
-# - task: PowerShell@2
-#   displayName: install
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       npm install
-# - task: PowerShell@2
-#   displayName: build
-#   inputs:
-#     targetType: 'inline'
-#     script: 'npm run build'
+- task: PowerShell@2
+  displayName: install
+  inputs:
+    targetType: 'inline'
+    script: |
+      npm install
+- task: PowerShell@2
+  displayName: build
+  inputs:
+    targetType: 'inline'
+    script: 'npm run build'
 
 - task: ArchiveFiles@2
   inputs:

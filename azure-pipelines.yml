@@ -13,6 +13,12 @@ steps:
     targetType: 'inline'
     script: |
       npm install
+
+- task: SonarQubePrepare@8
+  inputs:
+    SonarQube: 'sonar k liye'
+    scannerMode: 'cli'
+    configMode: 'file'
 - task: PowerShell@2
   displayName: build
   inputs:

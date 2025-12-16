@@ -26,7 +26,6 @@ steps:
       java -version
       sonar-scanner --version
 
-# 3️⃣ Prepare SonarQube (SOURCE scan only)
 - task: SonarQubePrepare@8
   displayName: 'Prepare SonarQube Analysis'
   inputs:
@@ -39,6 +38,8 @@ steps:
     extraProperties: |
       sonar.sourceEncoding=UTF-8
       sonar.exclusions=**/node_modules/**,**/build/**
+      sonar.branch.name=
+
 
 # 4️⃣ Run Sonar Scan
 - task: SonarQubeAnalyze@8

@@ -84,4 +84,4 @@ steps:
       npm install -g @sonar/scan
       
       sonar -D sonar.host.url=http://34.239.246.240:9000 -D sonar.token=sqp_07173aa1ba575ae44dbe1d9f4733d4670d1425c5 -D sonar.projectKey=react
-    workingDirectory: '(System.DefaultWorkingDirectory)'
+   

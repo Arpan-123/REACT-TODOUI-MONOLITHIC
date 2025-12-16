@@ -1,10 +1,14 @@
 trigger:
-  - main
+- main
 
 pool:
   name: 'targetpool'   # self-hosted agent
 
 steps:
+# 🔥 IMPORTANT: full git history
+- checkout: self
+  fetchDepth: 0
+
 # 1️⃣ Install dependencies
 - task: PowerShell@2
   displayName: 'NPM Install'
@@ -22,17 +26,7 @@ steps:
       java -version
       sonar-scanner --version
 
-
-
-# # 2️⃣ Build project (required, but NOT scanned)
-# - task: PowerShell@2
-#   displayName: 'Build React App'
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       npm run build
-
-# 3️⃣ Prepare SonarQube (SOURCE scan)
+# 3️⃣ Prepare SonarQube (SOURCE scan only)
 - task: SonarQubePrepare@8
   displayName: 'Prepare SonarQube Analysis'
   inputs:
@@ -45,19 +39,26 @@ steps:
     extraProperties: |
       sonar.sourceEncoding=UTF-8
       sonar.exclusions=**/node_modules/**,**/build/**
-      sonar.branch.name=
 
-# 4️⃣ RUN SCAN
+# 4️⃣ Run Sonar Scan
 - task: SonarQubeAnalyze@8
   displayName: 'Run SonarQube Analysis'
 
-# 5️⃣ Quality Gate
+# 5️⃣ Quality Gate (optional in Community)
 - task: SonarQubePublish@8
   displayName: 'Publish Quality Gate'
   inputs:
     pollingTimeoutSec: '300'
 
-# 6️⃣ Archive BUILD (Deployment ke liye)
+# 6️⃣ Build React App (Deployment ke liye)
+- task: PowerShell@2
+  displayName: 'Build React App'
+  inputs:
+    targetType: 'inline'
+    script: |
+      npm run build
+
+# 7️⃣ Archive BUILD
 - task: ArchiveFiles@2
   displayName: 'Archive build'
   inputs:
@@ -67,7 +68,7 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
     replaceExistingArchive: true
 
-# 7️⃣ Publish artifact
+# 8️⃣ Publish artifact
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:

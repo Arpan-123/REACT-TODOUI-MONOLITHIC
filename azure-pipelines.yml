@@ -36,7 +36,7 @@ steps:
 - task: SonarQubePrepare@8
   displayName: 'Prepare SonarQube Analysis'
   inputs:
-    SonarQube: 'sonar k liye'   # service connection
+    SonarQube: 'sonar-remote'   # service connection
     scannerMode: 'cli'
     configMode: 'manual'
     cliProjectKey: 'react-app'

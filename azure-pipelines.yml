@@ -24,19 +24,19 @@ steps:
 
 
 
-# 2️⃣ Build project (required, but NOT scanned)
-- task: PowerShell@2
-  displayName: 'Build React App'
-  inputs:
-    targetType: 'inline'
-    script: |
-      npm run build
+# # 2️⃣ Build project (required, but NOT scanned)
+# - task: PowerShell@2
+#   displayName: 'Build React App'
+#   inputs:
+#     targetType: 'inline'
+#     script: |
+#       npm run build
 
 # 3️⃣ Prepare SonarQube (SOURCE scan)
 - task: SonarQubePrepare@8
   displayName: 'Prepare SonarQube Analysis'
   inputs:
-    SonarQube: 'sonar-remote'   # service connection
+    SonarQube: 'sonar-remote'
     scannerMode: 'cli'
     configMode: 'manual'
     cliProjectKey: 'react-app'
@@ -45,6 +45,7 @@ steps:
     extraProperties: |
       sonar.sourceEncoding=UTF-8
       sonar.exclusions=**/node_modules/**,**/build/**
+      sonar.branch.name=
 
 # 4️⃣ RUN SCAN
 - task: SonarQubeAnalyze@8

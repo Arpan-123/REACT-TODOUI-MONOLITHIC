@@ -9,73 +9,40 @@ steps:
 - checkout: self
   fetchDepth: 0
 
-# 1️⃣ Install dependencies
-# - task: PowerShell@2
-#   displayName: 'NPM Install'
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       npm install
-
-# # 2️⃣ Verify Java & SonarScanner
-# - task: PowerShell@2
-#   displayName: 'Verify Java & SonarScanner'
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       java -version
-#       sonar-scanner --version
-
-# - task: SonarQubePrepare@8
-#   displayName: 'Prepare SonarQube Analysis'
-#   inputs:
-#     SonarQube: 'sonar-remote'
-#     scannerMode: 'cli'
-#     configMode: 'manual'
-#     cliProjectKey: 'react-app'
-#     cliProjectName: 'react-app'
-#     cliSources: 'src'
-#     extraProperties: |
-#       sonar.sourceEncoding=UTF-8
-#       sonar.exclusions=**/node_modules/**,**/build/**
-#       sonar.branch.name=
+#1️⃣ Install dependencies
+- task: PowerShell@2
+  displayName: 'NPM Install'
+  inputs:
+    targetType: 'inline'
+    script: |
+      npm install
 
 
-# # 4️⃣ Run Sonar Scan
-# - task: SonarQubeAnalyze@8
-#   displayName: 'Run SonarQube Analysis'
+# 6️⃣ Build React App (Deployment ke liye)
+- task: PowerShell@2
+  displayName: 'Build React App'
+  inputs:
+    targetType: 'inline'
+    script: |
+      npm run build
 
-# # 5️⃣ Quality Gate (optional in Community)
-# - task: SonarQubePublish@8
-#   displayName: 'Publish Quality Gate'
-#   inputs:
-#     pollingTimeoutSec: '300'
+# 7️⃣ Archive BUILD
+- task: ArchiveFiles@2
+  displayName: 'Archive build'
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
+    replaceExistingArchive: true
 
-# # 6️⃣ Build React App (Deployment ke liye)
-# - task: PowerShell@2
-#   displayName: 'Build React App'
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       npm run build
-
-# # 7️⃣ Archive BUILD
-# - task: ArchiveFiles@2
-#   displayName: 'Archive build'
-#   inputs:
-#     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
-#     includeRootFolder: false
-#     archiveType: 'zip'
-#     archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
-#     replaceExistingArchive: true
-
-# # 8️⃣ Publish artifact
-# - task: PublishBuildArtifacts@1
-#   displayName: 'Publish Artifact'
-#   inputs:
-#     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-#     ArtifactName: 'react-build'
-#     publishLocation: 'Container'
+# 8️⃣ Publish artifact
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'react-build'
+    publishLocation: 'Container'
 - task: PowerShell@2
   displayName: sonarpush
   inputs:
